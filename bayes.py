@@ -4,6 +4,7 @@ Created on Thu Jun  7 13:40:26 2018
 
 @author: cm
 """
+
 import os
 import jieba
 import numpy as np
@@ -11,11 +12,8 @@ import numpy as np
 
 pwd = os.path.dirname(os.path.abspath(__file__))
 
-#训练
+
 def train(trainMatrix,trainCategory):
-    """
-    情感分为两类：正面和负面，1为正面，0为负面。
-    """
     numTrainDocs = len(trainMatrix)
     numWords = len(trainMatrix[0])
     pAbusive = sum(trainCategory)/float(numTrainDocs)
@@ -39,7 +37,7 @@ def train(trainMatrix,trainCategory):
     return p0VectLog,p1VectLog,pAbusive    
 
 
-# 朴素贝叶斯分类函数
+# Classifier function of Bayes 
 def classify(vec2Classify,p0Vec,p1Vec,pClass1):
     p1=sum(vec2Classify*p1Vec) + np.log(pClass1)
     p0=sum(vec2Classify*p0Vec) + np.log(1-pClass1)
@@ -48,7 +46,7 @@ def classify(vec2Classify,p0Vec,p1Vec,pClass1):
     else:
         return 0
 
-#加载模型
+# Load model
 def load_p0Vec_p1Vec_pClass1():
     f = os.path.join(pwd,'parametre_pearson_40000','p0Vec.txt')
     with open(f,encoding='utf-8') as fp:
@@ -70,14 +68,14 @@ def load_p0Vec_p1Vec_pClass1():
 
 
 
-# 读取停用词(或者标点符号)
+# Load stopwords
 f = os.path.join(pwd,'dict','ponctuation_sentiment.txt')
 with open(f,encoding='utf-8') as fp:
     lines = fp.readlines()
 stopwords = set([line.strip('\n')  for line in lines])
   
   
-# 去除停用词 ok
+# drop stopwords
 def drop_stopwords(sentence):
     segResult = jieba.lcut(sentence)
     newSent = []
@@ -89,7 +87,7 @@ def drop_stopwords(sentence):
     return newSent
 
 
-#读取词汇特征
+# Load data
 f = os.path.join(pwd,'data','vocabulary_pearson_40000.txt')
 with open(f,encoding='utf8') as fp:
     vocabulary = fp.readlines()
@@ -111,8 +109,9 @@ def read_vector(name):
 
 
 
-#利用模型预测
+
 p0Vec,p1Vec,pClass1 = load_p0Vec_p1Vec_pClass1()
+
 def predictionBayes(Sentence):
     vector  = set_vector(Sentence)
     p = classify(vector,p0Vec,p1Vec,pClass1)
@@ -125,7 +124,7 @@ def predictionBayes(Sentence):
 
 
 if __name__ =='__main__':
-    #--- 测试 ---#
+    # Predict
     print(predictionBayes('我爱武汉'))
     
     
