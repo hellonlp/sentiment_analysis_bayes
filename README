@@ -1,7 +1,7 @@
 
 Sentiment analysis
 
-www.hellolp.com
-自然语言处理网站，由我自己创建，其中包含算法和网页。
 
-QQ群：230017601
+1、vocabulary_pearson_40000.txt是通过pearson计算词汇和情感的相关性，得到的TOP40000个词汇，并做了排序。
+2、训练中取了对情感影响最的前2000个词。
+
